@@ -8,6 +8,15 @@ exports:
 
 # Cohen's *d* Cheat Sheet
 
+Goal: Estimate the population value for the standardized mean difference:
+
+
+$$\delta = \frac{\mu_1 - \mu_2}{\sigma}$$
+
+where $\mu_1$ and $\mu_2$ are the population means of the two groups and $\sigma$ is the population standard deviation (which is common between the groups).  
+
+Cohen's *d* is a common sample estimator for this parameter.
+
 ## Basic Setup
 
 Given two independent groups:
@@ -20,7 +29,7 @@ where $\bar{X}$ is the sample mean, $s$ is the sample standard deviation (with B
 
 ## Cohen's *d* (Pooled SD)
 
-The most common version. Assumes equal population variances (homogeneity of variance).
+The most common version, which assumes equal population variances (homogeneity of variance).
 
 $$d = \frac{\bar{X}_1 - \bar{X}_2}{s_p}$$
 
@@ -28,11 +37,14 @@ where the **pooled standard deviation** is:
 
 $$s_p = \sqrt{\frac{(n_1 - 1)\,s_1^2 + (n_2 - 1)\,s_2^2}{n_1 + n_2 - 2}}$$
 
-> **Note:** The denominator $n_1 + n_2 - 2$ uses degrees of freedom (Bessel's correction). Some implementations incorrectly use $n_1 + n_2$, which underestimates the SD.
+> **Note:** The denominator $n_1 + n_2 - 2$ uses degrees of freedom (Bessel's correction). Some implementations use $n_1 + n_2$, which is the maximum likelihood estimator but is biased because it underestimates the SD.  The corrected version is an unbiased estimator.
 
 ---
+## Variants of Cohen's *d*
 
-## Glass's $\Delta$
+There are some variants that are sometimes used instead of the pooled SD version.
+
+### Glass's $\Delta$
 
 Uses only the **control group's** standard deviation as the denominator. Useful when variances are unequal and you want to express the effect relative to the control group's variability.
 
@@ -42,7 +54,7 @@ $$\Delta = \frac{\bar{X}_1 - \bar{X}_2}{s_{\text{control}}}$$
 
 ---
 
-## Cohen's *d* (Average SD)
+### Cohen's *d* (Average SD)
 
 Uses the simple average of the two variances rather than pooling by degrees of freedom. Sometimes used when sample sizes are very unequal.
 
@@ -62,15 +74,15 @@ Cohen's *d* is positively biased in small samples. Hedges' *g* applies a correct
 
 $$g = J \cdot d$$
 
-where:
+where a commonly used approximation for $J$ is:
 
 $$J = 1 - \frac{3}{4(n_1 + n_2) - 9}$$
 
-This is the commonly used approximation. The exact correction factor is:
+The exact correction factor is:
 
 $$J_{\text{exact}} = \frac{\Gamma\!\left(\frac{n_1+n_2-2}{2}\right)}{\sqrt{\frac{n_1+n_2-2}{2}} \;\; \Gamma\!\left(\frac{n_1+n_2-3}{2}\right)}$$
 
-where $\Gamma$ is the gamma function. The approximation is accurate to $O(n^{-3})$ and is standard in practice.
+where $\Gamma$ is the gamma function. The approximation is accurate to $O(n^{-3})$, but it's now standard to use the original version since it's easy to compute the gamma function.  This is important for total sample sizes less than 100:
 
 | $n_1 + n_2$ | $J$ (approx) | Bias reduction |
 |:-----------:|:------------:|:--------------:|
@@ -106,18 +118,6 @@ For a 95% CI: $z_{0.025} = 1.96$.
 > Find $\lambda_L$ and $\lambda_U$ such that the observed $t$ is the $1-\alpha/2$ and $\alpha/2$ quantile of the noncentral $t$ with $df = n_1 + n_2 - 2$, then convert back:
 >
 > $$d_L = \lambda_L \sqrt{\frac{n_1 + n_2}{n_1 \, n_2}}, \qquad d_U = \lambda_U \sqrt{\frac{n_1 + n_2}{n_1 \, n_2}}$$
-
----
-
-## Cohen's Benchmarks
-
-| $|d|$     | Interpretation |
-|:---------:|:--------------:|
-| 0.2       | Small          |
-| 0.5       | Medium         |
-| 0.8       | Large          |
-
-> **Caution:** These benchmarks are rules of thumb from Cohen (1988). In many applied settings, "small" effects can be practically important and "large" effects can be unremarkable. Interpret effect sizes in context.
 
 ---
 
